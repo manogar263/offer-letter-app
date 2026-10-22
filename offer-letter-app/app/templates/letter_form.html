@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if edit_id else 'New' }} offer letter{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if edit_id else 'New' }} offer letter</h1>
+<p class="sub">Fill in the candidate and job details. The logo, header and signature come from the company.</p>
+
+<div class="card">
+  {% if errors %}
+  <div class="errors"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+  {% endif %}
+
+  {% if not companies %}
+  <div class="empty">
+    <p>Add a company first so the letter has a logo and signatory.</p>
+    <a class="btn" href="/companies/new">Add company</a>
+  </div>
+  {% else %}
+  <form method="post" action="{{ '/letters/' ~ edit_id ~ '/edit' if edit_id else '/letters' }}">
+    <div class="section-title">Company and date</div>
+    <div class="grid">
+      <div><label for="company_id">Company *</label>
+        <select id="company_id" name="company_id" required>
+          {% for c in companies %}
+          <option value="{{ c.id }}" {{ 'selected' if values.company_id == c.id }}>{{ c.name }}</option>
+          {% endfor %}
+        </select></div>
+      <div><label for="letter_date">Letter date *</label>
+        <input id="letter_date" name="letter_date" type="date" value="{{ values.letter_date }}" required></div>
+    </div>
+
+    <div class="section-title">Candidate</div>
+    <div class="grid">
+      <div><label for="candidate_name">Candidate name *</label>
+        <input id="candidate_name" name="candidate_name" value="{{ values.candidate_name or '' }}" required></div>
+      <div><label for="candidate_email">Candidate email *</label>
+        <input id="candidate_email" name="candidate_email" type="email" value="{{ values.candidate_email or '' }}" required>
+        <div class="hint">Used to send the generated offer letter PDF.</div></div>
+      <div><label for="candidate_address">City / address</label>
+        <input id="candidate_address" name="candidate_address" value="{{ values.candidate_address or '' }}"></div>
+    </div>
+    {% if not edit_id %}
+    <label class="checkbox-label" for="send_email">
+      <input id="send_email" name="send_email" type="checkbox" value="true"
+             {{ 'checked' if values.send_email is not defined or values.send_email }}>
+      Send offer letter to candidate email
+    </label>
+    {% endif %}
+
+    <div class="section-title">Job details</div>
+    <div class="grid">
+      <div><label for="position">Position *</label>
+        <input id="position" name="position" value="{{ values.position or '' }}" required></div>
+      <div><label for="start_date">Start date *</label>
+        <input id="start_date" name="start_date" type="date" value="{{ values.start_date or '' }}" required></div>
+      <div><label for="employment_type">Employment type *</label>
+        <select id="employment_type" name="employment_type" required>
+          {% for t in employment_types %}
+          <option value="{{ t }}" {{ 'selected' if values.employment_type == t }}>{{ t }}</option>
+          {% endfor %}
+        </select></div>
+      <div><label for="work_location">Work location *</label>
+        <input id="work_location" name="work_location" value="{{ values.work_location or '' }}" required></div>
+    </div>
+
+    <label for="body_text">Job description / terms</label>
+    <textarea id="body_text" name="body_text" placeholder="Role responsibilities, terms and conditions...">{{ values.body_text or '' }}</textarea>
+    <div class="hint">Leave a blank line between paragraphs. If left empty, a standard terms sentence is used.</div>
+
+    <div class="actions">
+      <button class="btn" type="submit">{{ 'Save changes' if edit_id else 'Generate letter' }}</button>
+      <a class="btn ghost" href="/letters">Cancel</a>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

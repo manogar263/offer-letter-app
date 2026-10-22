@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Offer letters{% endblock %}
+{% block content %}
+<h1>Offer letters</h1>
+<p class="sub">All letters issued from this workspace.</p>
+
+<div class="card">
+  {% if letters %}
+  <div class="table-wrap">
+  <table class="list">
+    <thead>
+      <tr><th>Candidate</th><th>Company</th><th>Position</th><th>Start date</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for l in letters %}
+      <tr>
+        <td data-label="Candidate">{{ l.candidate_name }}</td>
+        <td data-label="Company">{{ l.company.name }}</td>
+        <td data-label="Position">{{ l.position }}</td>
+        <td data-label="Start date">{{ l.start_date.strftime("%b %d, %Y") }}</td>
+        <td data-label="Type">{{ l.employment_type }}</td>
+        <td data-label="Status"><span class="badge {{ 'ok' if l.status == 'Accepted' }}">{{ l.status }}</span></td>
+        <td class="letter-actions" data-label="Actions">
+          <div class="letter-action-group">
+          <a class="action-button" href="/letters/{{ l.id }}/edit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.9L19 8.3a2.1 2.1 0 0 0-3-3L5.2 16.1 4 20Z"></path></svg>
+            <span>Edit</span>
+          </a>
+          <a class="action-button" href="/letters/{{ l.id }}/preview">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+            <span>Preview</span>
+          </a>
+          <a class="action-button" href="/letters/{{ l.id }}/pdf">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2.8h8l4 4V21H6z"></path><path d="M14 3v5h5M8.5 15h7M8.5 18h7"></path></svg>
+            <span>PDF</span>
+          </a>
+          <form class="inline-form" method="post" action="/letters/{{ l.id }}/delete"
+                onsubmit="return confirm('Remove this offer letter? This cannot be undone.')">
+            <button class="icon-button danger-icon" type="submit"
+                    aria-label="Remove {{ l.candidate_name }} offer letter"
+                    title="Remove offer letter">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h16"></path>
+                <path d="M10 11v6M14 11v6"></path>
+                <path d="m5 7 1 13h12l1-13"></path>
+                <path d="M9 7V4h6v3"></path>
+              </svg>
+            </button>
+          </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <p>No offer letters yet.</p>
+    <a class="btn" href="/letters/new">Create the first letter</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

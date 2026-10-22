@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Add company{% endblock %}
+{% block content %}
+<h1>Add company</h1>
+<p class="sub">Upload your own logo and signature. These appear on every letter you issue.</p>
+
+<div class="card">
+  {% if errors %}
+  <div class="errors"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+  {% endif %}
+
+  <form method="post" action="/companies" enctype="multipart/form-data">
+    <div class="section-title">Company details</div>
+    <div class="grid">
+      <div><label for="name">Company name *</label>
+        <input id="name" name="name" value="{{ values.name or '' }}" required></div>
+      <div><label for="website">Website</label>
+        <input id="website" name="website" value="{{ values.website or '' }}" placeholder="www.example.com"></div>
+      <div><label for="email">Email</label>
+        <input id="email" name="email" type="email" value="{{ values.email or '' }}"></div>
+      <div><label for="location">Location</label>
+        <input id="location" name="location" value="{{ values.location or '' }}" placeholder="City, Country"></div>
+    </div>
+    <label for="tagline">Tagline</label>
+    <textarea id="tagline" name="tagline" style="min-height:70px">{{ values.tagline or '' }}</textarea>
+    <div class="hint">One line per row. Shown beside the logo in the letter header.</div>
+
+    <div class="section-title">Authorised signatory</div>
+    <div class="grid">
+      <div><label for="founder_name">Name *</label>
+        <input id="founder_name" name="founder_name" value="{{ values.founder_name or '' }}" required></div>
+      <div><label for="founder_title">Title</label>
+        <input id="founder_title" name="founder_title" value="{{ values.founder_title or 'Founder' }}"></div>
+    </div>
+
+    <div class="section-title">Images</div>
+    <div class="grid">
+      <div><label for="logo">Company logo</label>
+        <input id="logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.webp">
+        <div class="hint">PNG, JPG or WEBP, up to 2 MB. Transparent PNG works best.</div></div>
+      <div><label for="signature">Signature image</label>
+        <input id="signature" name="signature" type="file" accept=".png,.jpg,.jpeg,.webp">
+        <div class="hint">Upload only the signature of the person named above.</div></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" type="submit">Save company</button>
+      <a class="btn ghost" href="/companies">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+/* A4 offer-letter styles based on the supplied PSM reference. */
+:root {
+  --navy: #0b2a66;
+  --title: #123b7c;
+  --blue: #0a5cff;
+  --sky: #38b6ff;
+  --pale: #dce9fb;
+  --ink: #1b2a4a;
+}
+
+@page { size: A4; margin: 0; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #e9eef7;
+  font-family: "Poppins", "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+}
+
+.page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  overflow: hidden;
+  font-size: 11.5pt;
+  line-height: 1.6;
+}
+
+/* top-right diagonal corner */
+.corner-a, .corner-b {
+  position: absolute; top: 0; right: 0;
+  width: 31mm; height: 28mm;
+  clip-path: polygon(38% 0, 100% 0, 100% 100%);
+}
+.corner-a { background: var(--sky); }
+.corner-b {
+  width: 24mm; height: 22mm;
+  background: var(--blue);
+}
+
+/* header */
+.lh {
+  position: absolute;
+  top: 8mm; left: 10mm; right: 42mm;
+  display: flex; align-items: center;
+}
+.lh-logo { width: 56mm; flex: 0 0 56mm; }
+.lh-logo img { width: 43mm; height: 25mm; display: block; object-fit: contain; object-position: left center; }
+.logo-text {
+  font-size: 19pt; font-weight: 800; color: var(--navy);
+  letter-spacing: .3px; line-height: 1.1;
+}
+.lh-tag {
+  margin-left: 3mm; padding-left: 5mm;
+  border-left: .7mm solid var(--blue);
+  color: var(--blue); font-weight: 700; font-size: 9pt; line-height: 1.35;
+}
+
+/* content */
+.content { position: absolute; top: 31mm; left: 10mm; right: 10mm; }
+
+.meta { display: flex; justify-content: space-between; font-size: 8pt; }
+.meta .to { font-weight: 700; text-transform: uppercase; color: var(--ink); }
+.meta .date { color: var(--ink); }
+
+h1.title {
+  text-align: center; margin: 3mm 0 4mm;
+  font-size: 17pt; font-weight: 800; letter-spacing: .2px; color: var(--title);
+}
+
+p { margin: 0 0 2.3mm; font-size: 8pt; line-height: 1.5; }
+.greet b { color: var(--navy); }
+
+table.details { border-collapse: collapse; margin: 2mm 0 3mm; font-size: 8pt; }
+table.details th {
+  text-align: left; font-weight: 700; color: var(--navy);
+  padding: .45mm 5mm .45mm 0; white-space: nowrap;
+}
+table.details td { padding: .45mm 0; }
+
+.signoff { margin-top: 3mm; }
+.sig img { display: block; max-height: 13mm; max-width: 40mm; margin-bottom: .5mm; }
+.sig-space { height: 10mm; }
+.sig .name { font-weight: 700; color: var(--navy); font-size: 8pt; }
+.sig .role { font-size: 8pt; line-height: 1.35; }
+
+/* puzzle watermark from the supplied reference artwork */
+.watermark {
+  position: absolute; right: 0; bottom: 29mm;
+  width: 50mm; height: 50mm; z-index: 0;
+}
+.watermark img {
+  display: block; width: 100%; height: 100%; object-fit: contain; opacity: .28;
+}
+.content { z-index: 1; }
+
+/* footer */
+.lf {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 9mm;
+  background: var(--pale);
+  display: flex; align-items: center; justify-content: space-around;
+  font-size: 7pt; color: var(--blue);
+}
+.lf::before, .lf::after {
+  content: ""; position: absolute; bottom: 0;
+  width: 8mm; height: 9mm; background: var(--blue);
+}
+.lf::before { left: 0; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.lf::after { right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.lf span { display: inline-flex; align-items: center; gap: 1.3mm; z-index: 1; }
+.lf svg {
+  width: 4mm; height: 4mm; fill: none; stroke: currentColor;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+@media print {
+  html, body { background: #fff; }
+  .page { margin: 0; }
+}

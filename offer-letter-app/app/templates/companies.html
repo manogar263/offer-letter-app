@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Companies{% endblock %}
+{% block content %}
+<h1>Companies</h1>
+<p class="sub">Each company sets its own logo, tagline, founder and signature once.</p>
+
+<div class="card">
+  {% if companies %}
+  <table class="list">
+    <thead><tr><th>Company</th><th>Website</th><th>Email</th><th>Founder</th><th>Logo</th><th>Signature</th></tr></thead>
+    <tbody>
+      {% for c in companies %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.website }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.founder_name }} ({{ c.founder_title }})</td>
+        <td>{{ "Yes" if c.logo_path else "No" }}</td>
+        <td>{{ "Yes" if c.signature_path else "No" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty"><p>No companies yet.</p></div>
+  {% endif %}
+  <div class="actions"><a class="btn" href="/companies/new">Add company</a></div>
+</div>
+{% endblock %}

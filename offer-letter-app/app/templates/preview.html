@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Preview: {{ letter.candidate_name }}{% endblock %}
+{% block content %}
+<div class="preview-bar">
+  <div>
+    <h1>{{ letter.candidate_name }}</h1>
+    <p class="sub" style="margin:0">{{ letter.position }} at {{ letter.company.name }}
+      · <span class="badge {{ 'ok' if letter.status == 'Accepted' }}">{{ letter.status }}</span></p>
+  </div>
+  <div class="preview-actions">
+    {% if email_status == 'sent' %}
+    <p class="email-result success" role="status">Email status: Sent to {{ letter.candidate_email }}</p>
+    {% elif email_status == 'failed' %}
+    <p class="email-result failure" role="alert">Email status: Failed — {{ email_error }}</p>
+    {% endif %}
+    <a class="btn ghost" href="/letters/{{ letter.id }}/edit">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.9L19 8.3a2.1 2.1 0 0 0-3-3L5.2 16.1 4 20Z"></path></svg>
+      Edit
+    </a>
+    <button class="btn ghost" type="button" onclick="document.getElementById('lf').contentWindow.print()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"></path><path d="M7 14h10v7H7z"></path></svg>
+      Print
+    </button>
+    <form method="post" action="/letters/{{ letter.id }}/send" style="margin:0">
+      <button class="btn" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 21 3l-6.5 18-3.2-7.3L3 11.5Z"></path><path d="m11.3 13.7 4.5-4.5"></path></svg>
+        Send email
+      </button>
+    </form>
+    {% if letter.status != 'Accepted' %}
+    <form method="post" action="/letters/{{ letter.id }}/accept" style="margin:0">
+      <button class="btn ghost" type="submit">Mark as accepted</button>
+    </form>
+    {% endif %}
+    <form method="post" action="/letters/{{ letter.id }}/delete" style="margin:0"
+          onsubmit="return confirm('Remove this offer letter? This cannot be undone.')">
+      <button class="icon-button danger-icon" type="submit"
+              aria-label="Remove this offer letter"
+              title="Remove offer letter">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16"></path>
+          <path d="M10 11v6M14 11v6"></path>
+          <path d="m5 7 1 13h12l1-13"></path>
+          <path d="M9 7V4h6v3"></path>
+        </svg>
+      </button>
+    </form>
+    <a class="btn ghost" href="/letters">Back</a>
+  </div>
+</div>
+
+<div class="frame-wrap">
+  <iframe id="lf" class="letter-frame" src="/letters/{{ letter.id }}/letter" title="Offer letter"></iframe>
+</div>
+{% endblock %}

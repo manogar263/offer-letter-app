@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Offer Letter - {{ letter.candidate_name }}</title>
+  {% if inline_css %}
+  <style>{{ inline_css|safe }}</style>
+  {% else %}
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/letter.css">
+  {% endif %}
+</head>
+<body>
+<div class="page">
+  <div class="corner-a"></div>
+  <div class="corner-b"></div>
+  <div class="watermark" aria-hidden="true">
+    <img src="/static/img/puzzle-watermark.png" alt="">
+  </div>
+
+  <header class="lh">
+    <div class="lh-logo">
+      {% if logo_src %}
+        <img src="{{ logo_src }}" alt="{{ company.name }} logo">
+      {% else %}
+        <div class="logo-text">{{ company.name }}</div>
+      {% endif %}
+    </div>
+    {% if tagline_lines %}
+    <div class="lh-tag">
+      {% for line in tagline_lines %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="content">
+    <div class="meta">
+      <div class="to">
+        {{ letter.candidate_name }}{% if letter.candidate_address %},<br>{{ letter.candidate_address }}.{% endif %}
+      </div>
+      <div class="date">Date: {{ letter_date }}</div>
+    </div>
+
+    <h1 class="title">OFFER LETTER</h1>
+
+    <p class="greet">Dear <b>{{ letter.candidate_name }},</b></p>
+
+    <p>
+      We are pleased to extend to you an offer of employment with {{ company.name }}
+      for the position of <b>{{ letter.position|upper }}.</b>
+      We are confident that your skills, enthusiasm, and willingness to learn will
+      contribute to our mission.
+    </p>
+
+    <table class="details">
+      <tr><th>Position</th><td>: {{ letter.position|upper }}</td></tr>
+      <tr><th>Start Date</th><td>: {{ start_date }}</td></tr>
+      <tr><th>Employment Type</th><td>: {{ letter.employment_type|upper }}</td></tr>
+      <tr><th>Work Location</th><td>: {{ letter.work_location|upper }}</td></tr>
+    </table>
+
+    <p>As mutually agreed</p>
+
+    {% for para in body_paragraphs %}
+    <p>{{ para }}</p>
+    {% endfor %}
+
+    <p>Please confirm your acceptance of this offer by signing and returning a copy of this letter.</p>
+
+    <p>We are excited to welcome you to {{ company.name }} and look forward to working together.</p>
+
+    <div class="signoff">
+      <p>With best wishes.</p>
+      <div class="sig">
+        {% if signature_src %}
+          <img src="{{ signature_src }}" alt="Signature of {{ company.founder_name }}">
+        {% else %}
+          <div class="sig-space"></div>
+        {% endif %}
+        <div class="name">{{ company.founder_name }}</div>
+        <div class="role">{{ company.founder_title }}</div>
+        <div class="role">{{ company.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="lf">
+    {% if company.website %}
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
+      {{ company.website }}
+    </span>
+    {% endif %}
+    {% if company.email %}
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>
+      {{ company.email }}
+    </span>
+    {% endif %}
+    {% if company.location %}
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+      {{ company.location }}
+    </span>
+    {% endif %}
+  </footer>
+</div>
+</body>
+</html>
